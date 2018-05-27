@@ -1,0 +1,36 @@
+{% extends "allianceauth/base.html" %}
+{% load staticfiles %}
+{% load bootstrap %}
+{% load martortags %}
+{% load i18n %}
+{% load l10n %}
+{% load tz %}
+
+{% block page_title %}{{ topic.title }}{% endblock page_title %}
+
+{% block content %}
+    <div class="col-lg-12">
+        <h1 class="page-header">{% blocktrans with topic_title=topic.title %}Topic: {{ topic_title }}{% endblocktrans %}</h1>
+        {% for post in topic.posts.all %}
+            <div class="panel {% if forloop.first %}panel-primary{% else %}panel-default{% endif %}">
+                <div class="panel-heading">
+                    <img src="https://imageserver.eveonline.com/Character/{{ post.created_by.profile.main_character.character_id }}_32.jpg"
+                         alt="{{ post.created_by.profile.main_character.character_name }}"
+                         title="{{ post.created_by.profile.main_character.character_name }}"
+                         class="img-circle"/>
+                    {{ post.created_by.profile.main_character.character_name }}
+                    &#8226;
+                    {{ post.created_date|localtime|localize }}
+                </div>
+                <div class="panel-body">
+                    {{ post.content|safe_markdown }}
+                </div>
+            </div>
+        {% endfor %}
+        {% include 'bbs/post_form.html' with topic_id=topic.pk %}
+    </div>
+{% endblock content %}
+
+{% block extra_javascript %}
+    {{ form.media }}
+{% endblock extra_javascript %}

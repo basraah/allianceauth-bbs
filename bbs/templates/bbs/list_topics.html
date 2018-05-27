@@ -1,0 +1,97 @@
+{% extends "allianceauth/base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block page_title %}
+    {% if category %}
+        {% blocktrans %}Viewing {{ category }} Topics{% endblocktrans %}
+    {% else %}
+        {% trans "Viewing All Topics" %}
+    {% endif %}
+{% endblock page_title %}
+
+{% block content %}
+    <div class="col-lg-12 col-md-12">
+        <h2 class="page-header">
+            {% if category %}
+                {% blocktrans %}Viewing {{ category }} Topics{% endblocktrans %}
+            {% else %}
+                {% trans "Viewing All Topics" %}
+            {% endif %}
+        </h2>
+        <div class="list-group">
+            <div class="list-group-item active">
+                <a href="{% url 'bbs:topic-create' %}" class="btn btn-sm btn-default">New Topic</a>
+            </div>
+            {% if topics %}
+                {% for topic in topics %}
+                <a class="list-group-item {% if topic.pinned %}active{% endif %}"
+                   style="min-height: 60px;" href="{% url 'bbs:topic-view' pk=topic.pk %}">
+                    <div class="col-md-4 col-sm-9 col-xs-10">
+                        <div class="pull-left avatar" style="padding-right:8px;">
+                            <img src="https://imageserver.eveonline.com/Character/{{ topic.created_by.profile.main_character.character_id }}_32.jpg"
+                                 alt="{{ topic.created_by.profile.main_character.character_name }}"
+                                 title="{{ topic.created_by.profile.main_character.character_name }}"
+                                 class="img-circle"/>
+                        </div>
+                        <b>
+                            {{ topic.title }}
+                        </b>
+                        <br>
+                        <small class="hidden-xs">
+                            {% blocktrans with character_name=topic.created_by.profile.main_character.character_name created=topic.created_date|timesince %}
+                                {{ created }} ago by {{ character_name }}
+                            {% endblocktrans %}
+                        </small>
+                    </div>
+                    <div class="col-md-4 hidden-sm hidden-xs text-right">
+                        <div style="line-height: 0.5em;">&nbsp;</div> {% comment %} My filthy dirty v-align hack :( {% endcomment %}
+                        {{ topic.category }}
+                    </div>
+                    <div class="col-md-1 hidden-sm hidden-xs text-center">
+                        <small>
+                            <b>
+                                {{ topic.views }}
+                                <br>
+                                {% trans "Views" %}
+                            </b>
+                        </small>
+                    </div>
+                    <div class="col-md-1 hidden-sm hidden-xs text-center">
+                        <small>
+                            <b>
+                                {{ topic.posts.all|length }}
+                                <br>
+                                {% trans "Posts" %}
+                            </b>
+                        </small>
+                    </div>
+                    <div class="col-md-2 hidden-sm hidden-xs">
+                        <small>
+                            <b>
+                                {% if topic.posts.all %}
+                                    {% with last_post=topic.posts.all.last %}
+                                        {% blocktrans with character_name=last_post.created_by.profile.main_character %}
+                                            Last Reply By {{ character_name }}
+                                        {% endblocktrans %}
+                                        <br>
+                                        {% blocktrans with created=last_post.created_date|timesince %}
+                                            {{ created }} ago
+                                        {% endblocktrans %}
+                                    {% endwith %}
+                                {% else %}
+                                    No Replies
+                                {% endif %}
+                            </b>
+                        </small>
+                    </div>
+                </a>
+                {% endfor %}
+            {% else %}
+            <div class="list-group-item">
+                <strong>No Topics Found</strong>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock content %}

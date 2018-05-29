@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from setuptools import setup
-from . import __version__
+from bbs import __version__
 
 install_requires = [
     'django>=2.0',

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from setuptools import setup
+from setuptools import setup, find_packages
 from bbs import __version__
 
 install_requires = [
@@ -27,7 +27,7 @@ setup(
     },
     python_requires='~=3.4',
     license='GPLv3',
-    packages=['bbs'],
+    packages=find_packages(),
     url='https://github.com/basraah/allianceauth-bbs',
     zip_safe=False,
     include_package_data=True,

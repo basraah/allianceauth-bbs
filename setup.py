@@ -27,7 +27,7 @@ setup(
     },
     python_requires='~=3.4',
     license='GPLv3',
-    packages=['allianceauth.bbs'],
+    packages=['bbs'],
     url='https://github.com/basraah/allianceauth-bbs',
     zip_safe=False,
     include_package_data=True,
